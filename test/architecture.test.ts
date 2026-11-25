@@ -19,7 +19,7 @@ const ALLOWED: Record<string, readonly string[]> = {
 	web: ["kernel", "session"],
 };
 
-const SCOPE = "@pi-evolve/";
+const SCOPE = "@vernier/";
 const root = new URL("../packages", import.meta.url).pathname;
 
 function tsFiles(dir: string): string[] {

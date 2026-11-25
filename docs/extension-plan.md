@@ -1,4 +1,4 @@
-# pi-evolve 扩展方案：pi 有什么，我们补什么
+# Vernier 扩展方案：pi 有什么，我们补什么
 
 > 写于 2026-11-25。pi 侧的结论全部来自 commit `d57c2d21` 的源码，文件路径从 pi 仓库根算起。
 > 本文回答一个问题：**"基于 pi 做扩展"具体扩展什么，补完之后为什么算一个完整的 agent。**
@@ -130,7 +130,7 @@ resolveDocumentationVariant(...)        // harness.ts:487
 
 ## 3. 三类关系，落到包
 
-| pi-evolve 的包 | 关系 | 具体 |
+| Vernier 的包 | 关系 | 具体 |
 | --- | --- | --- |
 | `providers` | **用** `pi-ai` | `createModels()` + `deepseekProvider()` + `completeSimple()`。连 DeepSeek 的 `prompt_cache_hit_tokens` 它都已经映射成 `usage.cacheRead` 了 |
 | `kernel` | **自己写** | 协议：Plugin / Service / 8 个 Hook / 依赖校验。pi 没有对应物 |
@@ -277,5 +277,5 @@ CLI / Web / Evals ──► Kernel.run(task)
 
 pi 给了我们一个完整 agent 的**全套零件和一本教材**，但它的设计目标是"做一个好用的 CLI 产品"，所以：机制和产品代码耦合在一起、没有跨会话记忆、压缩不考虑缓存经济、评测服务于自己。
 
-pi-evolve 的设计目标不同：**做一个能证明自己每个机制都有用的 harness。**
+Vernier 的设计目标不同：**做一个能证明自己每个机制都有用的 harness。**
 所以我们把机制切成插件、给每个插件配一组对照实验、把成本和缓存命中率当成和成功率同等重要的指标。

@@ -1,10 +1,15 @@
-# pi-evolve
+# Vernier
 
 A Coding Agent harness where every context-engineering mechanism is a switchable
 plugin, and every plugin has to earn its place in an ablation run.
 
 > Status: M0 — skeleton and kernel protocol. No numbers here yet; the ones below
 > arrive with M8 and will be reproducible from `reports/`.
+
+A vernier is the sliding second scale on a caliper. It exists to resolve differences
+the main scale is too coarse to show. That is the job here: a single run cannot tell
+you whether compaction helped — the difference is inside the noise. Only repeated,
+controlled comparison can.
 
 ## Why this exists
 

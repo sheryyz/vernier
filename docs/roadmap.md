@@ -1,4 +1,4 @@
-# pi-evolve 实施路线
+# Vernier 实施路线
 
 > 写于 2026-11-25。配套阅读 [`extension-plan.md`](./extension-plan.md)（**扩展什么**），本文回答**按什么顺序做、每步做完怎么算过关**。
 > 文中所有数字分两类：**已核实**（标注来源）和**待实测**（写成 `TBD`）。简历上只能写实测出来的那一类。
@@ -21,9 +21,9 @@
 | --- | --- | --- |
 | Node | ✅ v24.21.0 | 原生 TS 类型剥离，无构建步骤 |
 | 模型 | ✅ 实测可用 | `deepseek-flash`（DeepSeek V4.1 Flash），1M 上下文 |
-| API Key | ✅ | `~/.config/pi-evolve/env`（权限 600），变量 `DEEPSEEK_API_KEY` |
+| API Key | ✅ | `~/.config/vernier/env`（权限 600），变量 `DEEPSEEK_API_KEY` |
 | 单价（来自 pi-ai 目录） | ✅ | 输入 $0.30/M，输出 $1.20/M，**缓存读 $0.006/M**，缓存写 $0 |
-| 仓库 | ✅ | `github.com/sheryyz/pi-evolve`，SSH 推送已通 |
+| 仓库 | ✅ | `github.com/sheryyz/vernier`，SSH 推送已通 |
 | Docker | ⬜ 待确认 | M2 需要，届时验证 |
 
 ---
@@ -366,7 +366,7 @@ SSE 订阅 M3 就在写的那份 trace JSONL，实时渲染决策与工具轨迹
 
 **简历条目**（M10 填数字）
 
-> **pi-evolve —— 可测量的 Coding Agent Harness（TypeScript / Node.js / DeepSeek）**
+> **Vernier —— 可测量的插件化 Coding Agent Harness（TypeScript / Node.js / DeepSeek）**
 > 1. **插件化 Agent Runtime**：自研 Model→Tool→Result 循环与内核协议，机制通过 8 个生命周期 Hook 解耦为可开关插件，依赖校验与分层边界由测试强制；支持任意插件子集独立关闭。
 > 2. **两段式上下文压缩**：先按规则零成本折叠历史工具输出，仍超阈值才触发模型摘要，并保持请求前缀字节稳定以保护 KV 缓存；相比单段式摘要压缩调用降低 `TBD`%、缓存命中率保持 `TBD`%。
 > 3. **跨会话长期记忆**：Markdown 文件 + 常驻索引 + 会话后自动抽取，连续任务平均模型轮数由 `TBD` 降至 `TBD`。
