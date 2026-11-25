@@ -22,6 +22,7 @@ export interface ToolError {
 
 export interface ToolResult {
 	callId: string;
+	toolName: string;
 	ok: boolean;
 	/** What the model sees. Already truncated by the time it reaches the request. */
 	content: string;
@@ -46,6 +47,16 @@ export interface Message {
 	toolCalls?: ToolCall[];
 	toolResult?: ToolResult;
 	meta?: MessageMeta;
+	/**
+	 * The provider's own form of this message, carried back verbatim on the next
+	 * request. deepseek-flash declares `requiresReasoningContentOnAssistantMessages`,
+	 * so an assistant message rebuilt from `content` alone loses its reasoning and
+	 * breaks multi-turn continuity. Only `@vernier/providers` may read this.
+	 *
+	 * Any plugin that rewrites a message must drop or replace `raw` with it --
+	 * leaving a stale `raw` next to edited `content` silently sends the old text.
+	 */
+	raw?: unknown;
 }
 
 /**
@@ -54,12 +65,41 @@ export interface Message {
  * are different questions and the report must be able to tell them apart.
  */
 export interface Usage {
+	/** Prompt tokens the provider charged at full price, i.e. the cache misses. */
 	inputTokens: number;
 	outputTokens: number;
+	/** Subset of `outputTokens`. deepseek-flash bills reasoning at the output rate. */
 	reasoningTokens: number;
 	cacheReadTokens: number;
-	cacheMissTokens: number;
+	cacheWriteTokens: number;
 	costUsd: number;
+}
+
+/** cacheRead / (cacheRead + input). The number compaction is most at risk of ruining. */
+export function cacheHitRate(usage: Usage): number {
+	const prompt = usage.inputTokens + usage.cacheReadTokens;
+	return prompt === 0 ? 0 : usage.cacheReadTokens / prompt;
+}
+
+export function emptyUsage(): Usage {
+	return {
+		inputTokens: 0,
+		outputTokens: 0,
+		reasoningTokens: 0,
+		cacheReadTokens: 0,
+		cacheWriteTokens: 0,
+		costUsd: 0,
+	};
+}
+
+export function addUsage(into: Usage, more: Usage): Usage {
+	into.inputTokens += more.inputTokens;
+	into.outputTokens += more.outputTokens;
+	into.reasoningTokens += more.reasoningTokens;
+	into.cacheReadTokens += more.cacheReadTokens;
+	into.cacheWriteTokens += more.cacheWriteTokens;
+	into.costUsd += more.costUsd;
+	return into;
 }
 
 export interface Budget {
